@@ -3,12 +3,10 @@ from faker import Faker
 import random
 
 fake = Faker("ru_RU")
-skills = ["Стремительный прыжок", "Электрический выстрел", "Ледяной удар", "Стремительный удар",
+SKILLS = ["Стремительный прыжок", "Электрический выстрел", "Ледяной удар", "Стремительный удар",
           "Кислотный взгляд", "Тайный побег", "Ледяной выстрел", "Огненный заряд"]
-new_skills = []
-new_skill = ""
-random_skills = random.sample(skills, 3)
-alphabet = {
+
+ALPHABET = {
     'а': 'а͠', 'б': 'б̋', 'в': 'в͒͠',
     'г': 'г͒͠', 'д': 'д̋', 'е': 'е͠',
     'ё': 'ё͒͠', 'ж': 'ж͒', 'з': 'з̋̋͠',
@@ -34,28 +32,38 @@ alphabet = {
     ' ': ' '
 }
 
-for skill in random_skills:
+
+def generate_character():
+    new_skills = []
     new_skill = ""
-    for letter in skill:
-        for new_letter in alphabet:
-            if letter == new_letter:
-                new_skill += alphabet[new_letter]
-    new_skills.append(new_skill)
+    random_skills = random.sample(SKILLS, 3)
 
-context = {
-    "first_name": fake.first_name_male(),
-    "last_name": fake.last_name_male(),
-    "job": fake.job(),
-    "town": fake.city(),
-    "strength": random.randrange(3, 18),
-    "agility": random.randrange(3, 18),
-    "endurance": random.randrange(3, 18),
-    "intelligence": random.randrange(3, 18),
-    "luck": random.randrange(3, 18),
-    "skill_1": new_skills[0],
-    "skill_2": new_skills[1],
-    "skill_3": new_skills[2]
-}
-result = context["first_name"] + context["last_name"]
+    for skill in random_skills:
+        new_skill = ""
+        for letter in skill:
+            for new_letter in ALPHABET:
+                if letter == new_letter:
+                    new_skill += ALPHABET[new_letter]
+        new_skills.append(new_skill)
 
-file_operations.render_template("src/charsheet.svg", f"src/output/svg/{result}.svg", context)
+    context = {
+        "first_name": fake.first_name_male(),
+        "last_name": fake.last_name_male(),
+        "job": fake.job(),
+        "town": fake.city(),
+        "strength": random.randrange(3, 18),
+        "agility": random.randrange(3, 18),
+        "endurance": random.randrange(3, 18),
+        "intelligence": random.randrange(3, 18),
+        "luck": random.randrange(3, 18),
+        "skill_1": new_skills[0],
+        "skill_2": new_skills[1],
+        "skill_3": new_skills[2]
+    }
+    return context
+
+
+if __name__ == '__main__':
+    context = generate_character()
+    result = context["first_name"] + context["last_name"]
+    file_operations.render_template("src/charsheet.svg", f"src/output/svg/{result}.svg", context)
