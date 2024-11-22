@@ -64,6 +64,7 @@ def generate_character():
 
 
 if __name__ == '__main__':
-    context = generate_character()
-    result = context["first_name"] + context["last_name"]
-    file_operations.render_template("src/charsheet.svg", f"src/output/svg/{result}.svg", context)
+    for i in range(10):
+        context = generate_character()
+        result = context["first_name"] + context["last_name"]
+        file_operations.render_template("src/charsheet.svg", f"src/output/svg/{result}.svg", context)
